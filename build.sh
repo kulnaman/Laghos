@@ -4,21 +4,26 @@ build(){
 local cpu_enable=$1
 set -e 
 set -o pipefail
+rm -rf build
+hostname=$(hostname)
 make clean
 if [ $cpu_enable = true ];then
   make setup 
 else
 source module_file.sh
+fi
+if [[ "$hostname" == lassen* ]]; then
 make setup MFEM_BUILD=pcuda
+INSTALL_PATH=$BENCHMARK_PATH/benchmarks/Laghos/install_lassen
+elif [[ "$hostname" == tioga* ]]; then
+make setup MFEM_BUILD=phip HIP_ARCH=gfx90a
+INSTALL_PATH=$BENCHMARK_PATH/benchmarks/Laghos/install_tioga
+fi
+if [ $cpu_enable = true ];then
+  INSTALL_PATH+="_cpu"
 fi
 make -j 
-module list
-if [ $cpu_enable = false ];then
-make install PREFIX=$BENCHMARK_PATH/benchmarks/Laghos/install_lassen
-else
-make install PREFIX=$BENCHMARK_PATH/benchmarks/Laghos/install_lassen_cpu
-  
-fi
+make install PREFIX=$INSTALL_PATH 
 }
 if [ $# -eq 0 ];then 
   build false
