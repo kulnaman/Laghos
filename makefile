@@ -264,11 +264,7 @@ METIS_URL = http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis
 METIS_VER = 4.0.3
 METIS_DIR = metis-4.0
 metis:
-	@(if [[ ! -e ../$(METIS_DIR) ]]; then cd ..; \
-		wget -nc $(METIS_URL)/OLD/metis-$(METIS_VER).tar.gz &&\
-		tar zxvf metis-$(METIS_VER).tar.gz &&\
-		ln -s metis-$(METIS_VER) $(METIS_DIR) &&\
-		cd $(METIS_DIR) &&\
+	@(if [[ -e ../$(METIS_DIR) ]]; then cd ../$(METIS_DIR); \
 		make -j $(NPROC) OPTFLAGS="-O2";\
 		else echo "Using existing ../$(METIS_DIR)"; fi)
 

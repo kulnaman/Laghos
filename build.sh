@@ -18,6 +18,10 @@ INSTALL_PATH=$BENCHMARK_PATH/benchmarks/Laghos/install_lassen
 elif [[ "$hostname" == tioga* ]]; then
 make setup MFEM_BUILD=phip HIP_ARCH=gfx90a
 INSTALL_PATH=$BENCHMARK_PATH/benchmarks/Laghos/install_tioga
+elif [[ "$hostname" =~ "palmetto" ]]; then
+  echo "Test"
+make setup MFEM_BUILD=pcuda
+INSTALL_PATH=$BENCHMARK_PATH/benchmarks/Laghos/install_palmetto
 fi
 if [ $cpu_enable = true ];then
   INSTALL_PATH+="_cpu"
